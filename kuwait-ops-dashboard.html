@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops Checklist — Kuwait</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#5B5468; --ink-2:#6B6478; --parchment:#FBF9FC; --parchment-2:#F3EEF7;
+    --brass:#A78BBF; --brass-light:#C9B8DA;
+    --green:#7FA88F; --green-bg:#E7F3EC;
+    --amber:#D9A66C; --amber-bg:#FBF1E1;
+    --red:#D98686; --red-bg:#FBEAEA;
+    --line:#E7E1EF; --muted:#9C94A6;
+    --shadow: 0 1px 2px rgba(91,84,104,0.05), 0 8px 24px -12px rgba(91,84,104,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 90% -10%, rgba(167,139,191,0.10), transparent 60%), var(--parchment);
+    color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:32px 28px 80px;}
+
+  .masthead{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:3px solid var(--ink); padding-bottom:18px;margin-bottom:24px;flex-wrap:wrap;gap:16px;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--brass);
+    text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;background:var(--brass);border-radius:1px;transform:rotate(45deg);display:inline-block;}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:34px;letter-spacing:.01em;margin:0;text-transform:uppercase;}
+  .masthead-right{text-align:right;font-size:12.5px;color:var(--muted);line-height:1.7;}
+  .masthead-right b{color:var(--ink);font-weight:600;}
+  .scope-tag{
+    display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--brass);
+    background:#F5EEFA;padding:3px 9px;border-radius:20px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:6px;
+    border:1px solid var(--brass-light);
+  }
+
+  .nav{display:flex;gap:6px;margin-bottom:24px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .nav-btn{
+    font-family:'Oswald',sans-serif;font-size:13.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;
+    padding:11px 18px;background:none;border:none;color:var(--muted);cursor:pointer;position:relative;
+    border-bottom:3px solid transparent;margin-bottom:-1px;transition:.15s;
+  }
+  .nav-btn:hover{color:var(--ink);}
+  .nav-btn.active{color:var(--ink);border-bottom-color:var(--brass);}
+  .nav-btn .count{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;background:var(--parchment-2);
+    border:1px solid var(--line);border-radius:10px;padding:1px 7px;margin-left:6px;color:var(--muted);
+  }
+  .nav-btn.active .count{color:var(--brass);border-color:var(--brass);}
+
+  .page{display:none;}
+  .page.active{display:block;animation:fadein .2s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .kpi-row{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    margin-bottom:28px;box-shadow:var(--shadow);
+  }
+  .kpi{background:var(--ink);color:var(--parchment);padding:20px 18px;position:relative;}
+  .kpi:nth-child(odd){background:var(--ink-2);}
+  .kpi .label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#D8D2E0;font-weight:600;margin-bottom:10px;}
+  .kpi .num{font-family:'Oswald',sans-serif;font-size:32px;font-weight:600;line-height:1;}
+  .kpi .sub{font-size:11px;color:#C8C1D2;margin-top:6px;}
+  .kpi.accent{background:var(--brass);color:#3D3548;}
+  .kpi.accent .label{color:rgba(61,53,72,.65);}
+  .kpi.accent .sub{color:rgba(61,53,72,.6);}
+  .kpi.done{background:var(--green);color:#fff;}
+  .kpi.done .label{color:rgba(255,255,255,.8);}
+  .kpi.done .sub{color:rgba(255,255,255,.85);}
+  .kpi.alert{background:var(--red);color:#fff;}
+  .kpi.alert .label{color:rgba(255,255,255,.75);}
+  .kpi.alert .sub{color:rgba(255,255,255,.8);}
+
+  .section{margin-bottom:32px;}
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;
+    border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap;gap:8px;
+  }
+  .section-head h2{
+    font-family:'Oswald',sans-serif;font-size:18px;text-transform:uppercase;letter-spacing:.03em;
+    margin:0;font-weight:600;
+  }
+  .section-note{font-size:12px;color:var(--muted);max-width:400px;text-align:right;}
+
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
+  thead th{
+    text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;
+    padding:11px 14px;background:var(--parchment-2);border-bottom:2px solid var(--ink);white-space:nowrap;
+  }
+  tbody td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--line);color:var(--ink);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FCFAFD;}
+  .score-pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .score-good{background:var(--green-bg);color:var(--green);}
+  .score-mid{background:var(--amber-bg);color:var(--amber);}
+  .score-bad{background:var(--red-bg);color:var(--red);}
+  .status-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+  .empty-note{color:var(--muted);padding:30px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);}
+
+  .weak-wrap{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px 26px;box-shadow:var(--shadow);}
+  .weak-row{display:grid;grid-template-columns:200px 1fr 46px;align-items:center;gap:14px;margin-bottom:13px;}
+  .weak-row:last-child{margin-bottom:0;}
+  .weak-label{font-size:13px;font-weight:600;color:var(--ink);}
+  .weak-track{height:16px;background:var(--parchment-2);border-radius:3px;overflow:hidden;border:1px solid var(--line);}
+  .weak-fill{height:100%;border-radius:2px 0 0 2px;}
+  .weak-count{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;text-align:right;color:var(--ink);}
+
+  .flag-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  .f-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:15px 16px;box-shadow:var(--shadow);border-left:4px solid var(--red);cursor:pointer;transition:.15s;}
+  .f-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px -6px rgba(91,84,104,.18);}
+  .f-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+  .f-name{font-weight:700;font-size:14px;color:var(--ink);}
+  .f-role{font-size:11px;color:var(--muted);}
+  .f-score{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--red);}
+  .f-loc{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;}
+  .f-loc b{color:var(--ink);}
+  .f-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px;}
+  .f-foot span{font-size:10px;color:var(--muted);}
+  .f-hint{font-size:10px;color:var(--brass);margin-top:8px;text-align:center;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(91,84,104,.5);z-index:100;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--parchment);border-radius:12px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px -10px rgba(0,0,0,.3);position:relative;}
+  .modal-head{background:var(--ink);color:var(--parchment);padding:22px 26px;border-radius:12px 12px 0 0;position:sticky;top:0;z-index:2;}
+  .modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--parchment);font-size:22px;cursor:pointer;line-height:1;opacity:.7;}
+  .modal-close:hover{opacity:1;}
+  .modal-name{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;}
+  .modal-sub{font-size:12px;color:#D8D2E0;margin-top:4px;}
+  .modal-score-row{display:flex;align-items:baseline;gap:12px;margin-top:10px;}
+  .modal-score{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;}
+  .modal-body{padding:22px 26px 26px;}
+  .modal-section-title{font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+  .chk-item{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px;border-left:3px solid var(--red);}
+  .chk-item.met{border-left-color:var(--green);}
+  .chk-zone{font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--brass);font-weight:700;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;}
+  .chk-result-tag{font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;letter-spacing:.03em;}
+  .chk-result-tag.not-met{background:var(--red-bg);color:var(--red);}
+  .chk-result-tag.met{background:var(--green-bg);color:var(--green);}
+  .chk-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .chk-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .chk-detail .lbl{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px;}
+  .chk-detail .txt{font-size:12px;color:var(--ink);line-height:1.5;}
+  .chk-detail .txt.empty{color:var(--muted);font-style:italic;}
+  .overall-comments{
+    background:#F5EEFA;border:1px solid var(--brass-light);border-radius:8px;padding:14px 16px;
+    margin-bottom:20px;font-size:12.5px;line-height:1.6;color:var(--ink);white-space:pre-line;
+  }
+  .overall-comments .oc-label{
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--brass);font-weight:700;margin-bottom:6px;
+  }
+
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);line-height:1.6;}
+
+  @media(max-width:800px){
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .flag-grid{grid-template-columns:1fr;}
+    .chk-detail{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div>
+      <div class="eyebrow">Charles &amp; Keith · Gulf Retail</div>
+      <h1>Ops Checklist Compliance</h1>
+    </div>
+    <div class="masthead-right">
+      <div class="scope-tag">📍 Kuwait view only</div><br>
+      Store Operations Audit<br>
+      Data through Aug 31, 2026
+    </div>
+  </div>
+
+  <div class="nav" id="navBar">
+    <button class="nav-btn active" data-page="detail">Store Detail</button>
+    <button class="nav-btn" data-page="flagged">Flagged Stores <span class="count" id="navFlagCount"></span></button>
+    <button class="nav-btn" data-page="weak">Weak Areas</button>
+  </div>
+
+  <div class="page active" id="page-detail">
+    <div class="kpi-row" id="kpiRow"></div>
+    <div class="section">
+      <div class="section-head">
+        <h2>Store-by-Store Audit Status</h2>
+        <div class="section-note" id="storeNote"></div>
+      </div>
+      <table id="storeTable">
+        <thead>
+          <tr>
+            <th>Area</th><th>Store</th><th>AIC</th><th>BM</th>
+            <th style="text-align:right">Score</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="storeBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page" id="page-flagged">
+    <div class="section-head">
+      <h2>Flagged Stores — Development Required</h2>
+      <div class="section-note" id="flaggedNote"></div>
+    </div>
+    <div class="flag-grid" id="flaggedGrid"></div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <button class="modal-close" id="modalClose">✕</button>
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-sub" id="modalSub"></div>
+        <div class="modal-score-row">
+          <div class="modal-score" id="modalScore"></div>
+          <div class="status-pill" id="modalStatus"></div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="modalOverallComments"></div>
+        <div class="modal-section-title" id="modalChkTitle"></div>
+        <div id="modalChecklist"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="page-weak">
+    <div class="section-head">
+      <h2>Weak Zones &amp; Categories</h2>
+      <div class="section-note">Frequency each checklist item was marked "NOT MET".</div>
+    </div>
+    <div id="weakZoneWrap" style="margin-bottom:20px;"></div>
+    <div id="weakCategoryWrap"></div>
+  </div>
+
+  <footer id="footerNote"></footer>
+</div>
+
+<script>
+const COUNTRY = "Kuwait";
+const DATA = {"meta": {"country": "Kuwait", "totalStores": 8, "audited": 8, "pending": 0, "rate": 100.0, "avgScore": 84.5}, "stores": [{"Country": "Kuwait", "Area": "Kuwait City", "Store": "Avenue Mall", "Audited": true, "Percentage": 90.0, "Status": "EXCELLENT", "AIC": "Nawas", "BM": "Nawas", "SubmissionId": "OPS-20260824-234908-2665", "categories": {"backend": {"score": 8, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 13, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Gate Mall", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "CK2 Avenue Mall", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": "Nawas", "BM": "SI/IFTEKHAR", "SubmissionId": "OPS-20260824-172311-4470", "categories": {"backend": {"score": 7, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 5, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Alkout Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "360 Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Assima Mall", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": "Nawas Deshmukh", "BM": "Aira", "SubmissionId": "OPS-20260822-173306-8182", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 5, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Al Khiran Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": "Nawas", "BM": "BIPIN KANDEL", "SubmissionId": "OPS-20260826-211825-3066", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Marina Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": "Nawas", "BM": "JOHN", "SubmissionId": "OPS-20260826-132848-2661", "categories": {"backend": {"score": 7, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 13, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}], "flagged": [], "flaggedDetail": {}, "weakZones": [{"area": "People", "count": 12}, {"area": "Backend", "count": 8}, {"area": "Retail \u2014 Customer's Experience", "count": 6}, {"area": "Business", "count": 4}], "weakCategories": [{"area": "Learning & Development", "count": 12}, {"area": "Stockroom", "count": 7}, {"area": "Guests", "count": 4}, {"area": "Product Feedback", "count": 2}, {"area": "Business Performance & Analysis", "count": 2}, {"area": "Workplace Safety & Health", "count": 1}, {"area": "Windows", "count": 1}, {"area": "Store's Atmosphere", "count": 1}]};
+
+function scoreClass(pct){ if(pct>=85) return 'score-good'; if(pct>=70) return 'score-mid'; return 'score-bad'; }
+function statusClass(status){
+  if(!status) return {bg:'var(--parchment-2)',c:'var(--muted)'};
+  const s = status.toUpperCase();
+  if(s==='EXCELLENT') return {bg:'var(--green-bg)',c:'var(--green)'};
+  if(s==='MEETS STANDARD') return {bg:'var(--amber-bg)',c:'var(--amber)'};
+  return {bg:'var(--red-bg)',c:'var(--red)'};
+}
+
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelector(`.nav-btn[data-page="${name}"]`).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.getElementById('navBar').addEventListener('click', e=>{
+  if(e.target.classList.contains('nav-btn')) showPage(e.target.dataset.page);
+});
+document.getElementById('navFlagCount').textContent = DATA.flagged.length;
+
+const m = DATA.meta;
+const kpis = [
+  {label:'Total Stores', num:m.totalStores, sub:'In '+COUNTRY},
+  {label:'Audited', num:m.audited, sub:m.rate+'% complete', done: m.rate===100},
+  {label:'Pending', num:m.pending, sub:m.pending>0?'Not yet audited':'None outstanding', alert: m.pending>0 && m.rate===0},
+  {label:'Avg Score', num: m.avgScore!=null?m.avgScore+'%':'—', sub:'Across audited stores'},
+];
+document.getElementById('kpiRow').innerHTML = kpis.map(k=>`
+  <div class="kpi ${k.done?'done':''} ${k.alert?'alert':''}">
+    <div class="label">${k.label}</div><div class="num">${k.num}</div><div class="sub">${k.sub}</div>
+  </div>`).join('');
+
+document.getElementById('storeNote').textContent = DATA.stores.length+' store'+(DATA.stores.length!==1?'s':'')+' in '+COUNTRY;
+function storeRowHtml(s){
+  const sc = statusClass(s.Status);
+  const scoreCell = s.Audited ? `<span class="score-pill ${scoreClass(s.Percentage)}">${s.Percentage}%</span>` : `<span style="color:var(--muted);font-size:12px">—</span>`;
+  const statusCell = s.Audited ? `<span class="status-pill" style="background:${sc.bg};color:${sc.c}">${s.Status}</span>` : `<span style="color:var(--muted);font-size:12px">Pending</span>`;
+  return `<tr>
+    <td>${s.Area}</td><td><b>${s.Store}</b></td><td>${s.AIC||'—'}</td><td>${s.BM||'—'}</td>
+    <td style="text-align:right">${scoreCell}</td><td>${statusCell}</td>
+  </tr>`;
+}
+document.getElementById('storeBody').innerHTML = DATA.stores.length
+  ? DATA.stores.map(storeRowHtml).join('')
+  : `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No store data available.</td></tr>`;
+
+document.getElementById('flaggedNote').textContent = DATA.flagged.length+' store'+(DATA.flagged.length!==1?'s':'')+' flagged · sorted lowest score first.';
+function renderFlagged(){
+  if(!DATA.flagged.length){
+    document.getElementById('page-flagged').querySelector('.flag-grid').outerHTML = `<div class="empty-note">🎉 No stores flagged for ${COUNTRY}.</div>`;
+    return;
+  }
+  document.getElementById('flaggedGrid').innerHTML = DATA.flagged.map(f=>`
+    <div class="f-card" data-id="${f.id}">
+      <div class="f-top">
+        <div><div class="f-name">${f.store}</div><div class="f-role">${f.area}</div></div>
+        <div class="f-score">${f.score}%</div>
+      </div>
+      <div class="f-loc"><b>AIC:</b> ${f.aic||'—'} &nbsp; <b>BM:</b> ${f.bm||'—'}</div>
+      <div class="f-foot">
+        <span class="status-pill" style="background:var(--red-bg);color:var(--red);">Development Required</span>
+        <span>${f.notMetCount} of ${f.totalCheckpoints} not met</span>
+      </div>
+      <div class="f-hint">View all comments & actions →</div>
+    </div>`).join('');
+}
+renderFlagged();
+
+const overlay = document.getElementById('modalOverlay');
+function openModal(id){
+  const f = DATA.flagged.find(x=>x.id===id);
+  const d = DATA.flaggedDetail[id];
+  if(!f) return;
+  document.getElementById('modalName').textContent = f.store;
+  document.getElementById('modalSub').textContent = `${f.area} · AIC: ${f.aic||'—'} · BM: ${f.bm||'—'}`;
+  document.getElementById('modalScore').textContent = f.score+'%';
+  document.getElementById('modalScore').style.color = '#F0C5C5';
+  document.getElementById('modalStatus').textContent = 'DEVELOPMENT REQUIRED';
+  document.getElementById('modalStatus').style.background = 'var(--red-bg)';
+  document.getElementById('modalStatus').style.color = 'var(--red)';
+  document.getElementById('modalOverallComments').innerHTML = d.overallComments
+    ? `<div class="overall-comments"><div class="oc-label">Auditor's Overall Comments</div>${d.overallComments}</div>` : '';
+  document.getElementById('modalChkTitle').textContent = `All Checkpoint Comments (${d.checkpoints.length} of ${d.totalCheckpoints}, ${d.notMetCount} not met)`;
+  document.getElementById('modalChecklist').innerHTML = d.checkpoints.map(c=>{
+    const isMet = c.result==='MET';
+    return `<div class="chk-item ${isMet?'met':''}">
+      <div class="chk-zone"><span>${c.zone} · ${c.category}</span><span class="chk-result-tag ${isMet?'met':'not-met'}">${c.result}</span></div>
+      <div class="chk-title">${c.checkpoint}</div>
+      <div class="chk-detail">
+        <div><div class="lbl">Remark</div><div class="txt ${!c.remark?'empty':''}">${c.remark || 'No remark recorded.'}</div></div>
+        <div><div class="lbl">Action</div><div class="txt ${!c.action?'empty':''}">${c.action || 'No action recorded.'}</div></div>
+      </div>
+    </div>`;
+  }).join('') || '<div style="color:var(--muted);">No checkpoint-level detail available.</div>';
+  overlay.classList.add('open');
+}
+document.getElementById('flaggedGrid')?.addEventListener('click', e=>{
+  const card = e.target.closest('.f-card');
+  if(card) openModal(card.dataset.id);
+});
+document.getElementById('modalClose').addEventListener('click', ()=> overlay.classList.remove('open'));
+overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.classList.remove('open'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') overlay.classList.remove('open'); });
+
+if(DATA.weakZones.length){
+  const maxW = Math.max(...DATA.weakZones.map(w=>w.count));
+  const grad = ['#A78BBF','#B79BC9','#C7ABD3','#D3B9DC','#DFC7E4'];
+  document.getElementById('weakZoneWrap').innerHTML = `<div class="weak-wrap"><div style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:14px;">By Zone</div>` +
+    DATA.weakZones.map((w,i)=>`<div class="weak-row"><div class="weak-label">${w.area}</div><div class="weak-track"><div class="weak-fill" style="width:${w.count/maxW*100}%; background:${grad[i]||'#A78BBF'}"></div></div><div class="weak-count">${w.count}</div></div>`).join('') + `</div>`;
+} else {
+  document.getElementById('weakZoneWrap').innerHTML = `<div class="empty-note">No weak-area data available for ${COUNTRY} yet.</div>`;
+}
+if(DATA.weakCategories.length){
+  const maxC = Math.max(...DATA.weakCategories.map(w=>w.count));
+  const grad = ['#A78BBF','#B79BC9','#C7ABD3','#D3B9DC','#DFC7E4','#E9D6EC','#F0E2F1','#F5EBF5','#FAF3FA'];
+  document.getElementById('weakCategoryWrap').innerHTML = `<div class="weak-wrap"><div style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:14px;">By Category</div>` +
+    DATA.weakCategories.slice(0,10).map((w,i)=>`<div class="weak-row"><div class="weak-label">${w.area}</div><div class="weak-track"><div class="weak-fill" style="width:${w.count/maxC*100}%; background:${grad[i]||'#A78BBF'}"></div></div><div class="weak-count">${w.count}</div></div>`).join('') + `</div>`;
+}
+
+document.getElementById('footerNote').innerHTML =
+  `<b>Data notes:</b> This view shows ${COUNTRY} only. Category maximums: Retail Planning /2, Customer Experience /14,
+  Backend /9, People /8, Business /6 (total /39).<br>Charles &amp; Keith · Gulf Retail Operations`;
+</script>
+</body>
+</html>

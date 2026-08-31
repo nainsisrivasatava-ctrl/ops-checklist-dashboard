@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ops Checklist Compliance — Gulf Retail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#5B5468; --ink-2:#6B6478; --parchment:#FBF9FC; --parchment-2:#F3EEF7;
+    --brass:#A78BBF; --brass-light:#C9B8DA;
+    --green:#7FA88F; --green-bg:#E7F3EC;
+    --amber:#D9A66C; --amber-bg:#FBF1E1;
+    --red:#D98686; --red-bg:#FBEAEA;
+    --line:#E7E1EF; --muted:#9C94A6;
+    --shadow: 0 1px 2px rgba(91,84,104,0.05), 0 8px 24px -12px rgba(91,84,104,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 90% -10%, rgba(167,139,191,0.10), transparent 60%), var(--parchment);
+    color:var(--ink); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:32px 28px 80px;}
+
+  .masthead{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:3px solid var(--ink); padding-bottom:18px;margin-bottom:20px;flex-wrap:wrap;gap:16px;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.14em;color:var(--brass);
+    text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;background:var(--brass);border-radius:1px;transform:rotate(45deg);display:inline-block;}
+  h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:34px;letter-spacing:.01em;margin:0;text-transform:uppercase;}
+  .masthead-right{text-align:right;font-size:12.5px;color:var(--muted);line-height:1.7;}
+  .masthead-right b{color:var(--ink);font-weight:600;}
+  .tag-live{
+    display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--green);
+    background:var(--green-bg);padding:3px 9px;border-radius:20px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:6px;
+  }
+  .tag-live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+  .nav{display:flex;gap:6px;margin-bottom:28px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .nav-btn{
+    font-family:'Oswald',sans-serif;font-size:13.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;
+    padding:11px 18px;background:none;border:none;color:var(--muted);cursor:pointer;position:relative;
+    border-bottom:3px solid transparent;margin-bottom:-1px;transition:.15s;
+  }
+  .nav-btn:hover{color:var(--ink);}
+  .nav-btn.active{color:var(--ink);border-bottom-color:var(--brass);}
+  .nav-btn .count{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;background:var(--parchment-2);
+    border:1px solid var(--line);border-radius:10px;padding:1px 7px;margin-left:6px;color:var(--muted);
+  }
+  .nav-btn.active .count{color:var(--brass);border-color:var(--brass);}
+
+  .page{display:none;}
+  .page.active{display:block;animation:fadein .2s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .kpi-row{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    margin-bottom:32px;box-shadow:var(--shadow);
+  }
+  .kpi{background:var(--ink);color:var(--parchment);padding:18px 16px;position:relative;}
+  .kpi:nth-child(odd){background:var(--ink-2);}
+  .kpi .label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#B8B0A0;font-weight:600;margin-bottom:9px;}
+  .kpi .num{font-family:'Oswald',sans-serif;font-size:28px;font-weight:600;line-height:1;}
+  .kpi .sub{font-size:10.5px;color:#9C9385;margin-top:6px;}
+  .kpi.accent{background:var(--brass);color:var(--ink);}
+  .kpi.accent .label{color:rgba(27,36,48,.6);}
+  .kpi.accent .sub{color:rgba(27,36,48,.55);}
+  .kpi.alert{background:var(--red);color:#fff;}
+  .kpi.alert .label{color:rgba(255,255,255,.7);}
+  .kpi.alert .sub{color:rgba(255,255,255,.75);}
+
+  .section{margin-bottom:36px;}
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;
+    border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap;gap:8px;
+  }
+  .section-head h2{
+    font-family:'Oswald',sans-serif;font-size:18px;text-transform:uppercase;letter-spacing:.03em;
+    margin:0;font-weight:600;display:flex;align-items:center;gap:10px;
+  }
+  .section-head h2 .idx{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--brass);
+    background:var(--parchment-2);border:1px solid var(--line);padding:2px 7px;border-radius:4px;
+  }
+  .section-note{font-size:12px;color:var(--muted);max-width:420px;text-align:right;}
+
+  .country-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  .country-card{
+    background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 16px 14px;
+    position:relative;box-shadow:var(--shadow);cursor:pointer;transition:.15s;
+  }
+  .country-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px -6px rgba(27,36,48,.25);}
+  .country-card::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 3px 3px 0;background:var(--brass);}
+  .country-card.zero::before{background:var(--red);}
+  .country-card.done::before{background:var(--green);}
+  .c-name{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;text-transform:uppercase;margin-bottom:2px;}
+  .c-rate{font-family:'Oswald',sans-serif;font-size:28px;font-weight:600;color:var(--ink);margin:6px 0 2px;}
+  .c-rate.zero{color:var(--red);}
+  .c-rate.done{color:var(--green);}
+  .c-rate-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+  .bar-track{height:7px;background:var(--parchment-2);border-radius:4px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line);}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--brass),var(--brass-light));border-radius:4px;}
+  .bar-fill.zero{background:var(--red);width:2px !important;}
+  .bar-fill.done{background:linear-gradient(90deg,var(--green),#5FA37E);}
+  .c-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+  .c-stats b{color:var(--ink);font-weight:600;}
+  .c-hint{font-size:10px;color:var(--brass);margin-top:8px;text-align:center;}
+
+  .controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+  .chip{
+    border:1px solid var(--line);background:#fff;padding:6px 13px;border-radius:20px;font-size:12px;font-weight:600;
+    cursor:pointer;color:var(--muted);transition:.15s;font-family:'Inter',sans-serif;
+  }
+  .chip:hover{border-color:var(--brass);color:var(--ink);}
+  .chip.active{background:var(--ink);color:var(--parchment);border-color:var(--ink);}
+  .search-box{
+    margin-left:auto;border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:12px;
+    font-family:'Inter',sans-serif;width:200px;background:#fff;
+  }
+  .search-box:focus{outline:none;border-color:var(--brass);}
+
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);}
+  thead th{
+    text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;
+    padding:11px 14px;background:var(--parchment-2);border-bottom:2px solid var(--ink);white-space:nowrap;
+  }
+  tbody td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--line);color:var(--ink);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FBF9F4;}
+  .num-cell{font-family:'JetBrains Mono',monospace;font-weight:600;}
+  .score-pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .score-good{background:var(--green-bg);color:var(--green);}
+  .score-mid{background:var(--amber-bg);color:var(--amber);}
+  .score-bad{background:var(--red-bg);color:var(--red);}
+  .status-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+
+  .confirm-banner{
+    background:var(--green-bg);border:1px solid var(--green);border-radius:8px;padding:10px 14px;
+    font-size:12px;color:var(--green);margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;line-height:1.5;
+  }
+
+  .weak-wrap{background:#fff;border:1px solid var(--line);border-radius:10px;padding:22px 26px;box-shadow:var(--shadow);}
+  .weak-row{display:grid;grid-template-columns:220px 1fr 46px;align-items:center;gap:14px;margin-bottom:13px;}
+  .weak-row:last-child{margin-bottom:0;}
+  .weak-label{font-size:13px;font-weight:600;color:var(--ink);}
+  .weak-track{height:16px;background:var(--parchment-2);border-radius:3px;overflow:hidden;border:1px solid var(--line);}
+  .weak-fill{height:100%;border-radius:2px 0 0 2px;}
+  .weak-count{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;text-align:right;color:var(--ink);}
+  .weak-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+  .weak-summary-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:var(--shadow);}
+  .weak-summary-card .n{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--brass);}
+  .weak-summary-card .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px;}
+
+  .flag-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .f-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:15px 16px;box-shadow:var(--shadow);border-left:4px solid var(--red);cursor:pointer;transition:.15s;}
+  .f-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px -6px rgba(27,36,48,.25);}
+  .f-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+  .f-name{font-weight:700;font-size:14px;color:var(--ink);}
+  .f-role{font-size:11px;color:var(--muted);}
+  .f-score{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--red);}
+  .f-loc{font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;}
+  .f-loc b{color:var(--ink);}
+  .f-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px;}
+  .f-foot span{font-size:10px;color:var(--muted);}
+  .f-hint{font-size:10px;color:var(--brass);margin-top:8px;text-align:center;}
+
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(27,36,48,.55);z-index:100;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--parchment);border-radius:12px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px -10px rgba(0,0,0,.4);position:relative;}
+  .modal-head{background:var(--ink);color:var(--parchment);padding:22px 26px;border-radius:12px 12px 0 0;position:sticky;top:0;z-index:2;}
+  .modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--parchment);font-size:22px;cursor:pointer;line-height:1;opacity:.7;}
+  .modal-close:hover{opacity:1;}
+  .modal-name{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;}
+  .modal-sub{font-size:12px;color:#B8B0A0;margin-top:4px;}
+  .modal-score-row{display:flex;align-items:baseline;gap:12px;margin-top:10px;}
+  .modal-score{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;}
+  .modal-body{padding:22px 26px 26px;}
+  .modal-section-title{font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+  .chk-item{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:10px;border-left:3px solid var(--red);}
+  .chk-item.met{border-left-color:var(--green);}
+  .chk-zone{font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--brass);font-weight:700;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;}
+  .chk-result-tag{font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;letter-spacing:.03em;}
+  .chk-result-tag.not-met{background:var(--red-bg);color:var(--red);}
+  .chk-result-tag.met{background:var(--green-bg);color:var(--green);}
+  .chk-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .chk-detail{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .chk-detail .lbl{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px;}
+  .chk-detail .txt{font-size:12px;color:var(--ink);line-height:1.5;}
+  .chk-detail .txt.empty{color:var(--muted);font-style:italic;}
+  .overall-comments{
+    background:#FBF3E8;border:1px solid var(--brass-light);border-radius:8px;padding:14px 16px;
+    margin-bottom:20px;font-size:12.5px;line-height:1.6;color:var(--ink);white-space:pre-line;
+  }
+  .overall-comments .oc-label{
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--brass);font-weight:700;margin-bottom:6px;
+  }
+
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  footer .note{max-width:760px;line-height:1.6;}
+
+  @media(max-width:1050px){
+    .kpi-row{grid-template-columns:repeat(3,1fr);}
+    .country-grid{grid-template-columns:repeat(2,1fr);}
+    .flag-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:640px){
+    h1{font-size:24px;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .country-grid{grid-template-columns:1fr;}
+    .flag-grid{grid-template-columns:1fr;}
+    .weak-row{grid-template-columns:130px 1fr 36px;}
+    .chk-detail{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div>
+      <div class="eyebrow">Charles &amp; Keith · Gulf Retail</div>
+      <h1>Ops Checklist Compliance</h1>
+    </div>
+    <div class="masthead-right">
+      <div class="tag-live">Store Operations Audit</div><br>
+      Countries live: <b>UAE · Kuwait · Qatar · Oman · Bahrain</b><br>
+      Data through Aug 31, 2026
+    </div>
+  </div>
+
+  <div class="nav" id="navBar">
+    <button class="nav-btn active" data-page="overview">Overview</button>
+    <button class="nav-btn" data-page="country">Country Detail</button>
+    <button class="nav-btn" data-page="flagged">Flagged Stores <span class="count" id="navFlagCount"></span></button>
+    <button class="nav-btn" data-page="weak">Weak Areas</button>
+  </div>
+
+  <!-- PAGE 1: OVERVIEW -->
+  <div class="page active" id="page-overview">
+    <div class="kpi-row" id="kpiRow"></div>
+
+    <div class="section">
+      <div class="section-head">
+        <h2><span class="idx">01</span> Store Audits — by Country</h2>
+        <div class="section-note">Click a country card to see its full store-by-store breakdown.</div>
+      </div>
+      <div class="country-grid" id="countryGrid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <h2><span class="idx">02</span> All Stores — Audit Status</h2>
+        <div class="section-note" id="storeNote"></div>
+      </div>
+      <div class="controls" id="storeFilters"></div>
+      <table id="storeTable">
+        <thead>
+          <tr>
+            <th>Country</th><th>Area</th><th>Store</th>
+            <th>AIC</th><th>BM</th>
+            <th style="text-align:right">Score</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="storeBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PAGE 2: COUNTRY DETAIL -->
+  <div class="page" id="page-country">
+    <div class="section-head">
+      <h2><span class="idx">01</span> Country Detail</h2>
+      <div class="section-note">Full store-audit picture for one country at a time.</div>
+    </div>
+    <div class="controls" id="countryTabs"></div>
+    <div class="country-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px;" id="countryDetailKpis"></div>
+    <table id="countryDetailTable">
+      <thead>
+        <tr>
+          <th>Area</th><th>Store</th><th>AIC</th><th>BM</th>
+          <th style="text-align:right">Score</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="countryDetailBody"></tbody>
+    </table>
+  </div>
+
+  <!-- PAGE 3: FLAGGED STORES -->
+  <div class="page" id="page-flagged">
+    <div class="section-head">
+      <h2><span class="idx">01</span> Flagged Stores — Development Required</h2>
+      <div class="section-note" id="flaggedNote"></div>
+    </div>
+    <div class="controls" id="flaggedFilters"></div>
+    <div class="flag-grid" id="flaggedGrid"></div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <div class="modal-head">
+        <button class="modal-close" id="modalClose">✕</button>
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-sub" id="modalSub"></div>
+        <div class="modal-score-row">
+          <div class="modal-score" id="modalScore"></div>
+          <div class="status-pill" id="modalStatus"></div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="modalOverallComments"></div>
+        <div class="modal-section-title" id="modalChkTitle"></div>
+        <div id="modalChecklist"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: WEAK AREAS -->
+  <div class="page" id="page-weak">
+    <div class="section-head">
+      <h2><span class="idx">01</span> Weak Zones &amp; Categories</h2>
+      <div class="section-note">Frequency each checklist item was marked "NOT MET" across all audits.</div>
+    </div>
+    <div class="weak-summary" id="weakSummary"></div>
+    <div class="weak-wrap" id="weakZoneWrap" style="margin-bottom:20px;"></div>
+    <div class="weak-wrap" id="weakCategoryWrap"></div>
+  </div>
+
+  <footer>
+    <div class="note" id="footerNote"></div>
+    <div>Charles &amp; Keith · Gulf Retail Operations</div>
+  </footer>
+
+</div>
+
+<script>
+const DATA = {"totals": {"totalStores": 43, "audited": 26, "pending": 17, "rate": 60.5, "avgScore": 83.5, "excellent": 6, "meetsStandard": 11, "developmentRequired": 9, "flaggedCount": 9, "zeroCountries": 1}, "countries": [{"country": "UAE", "totalStores": 24, "audited": 10, "pending": 14, "rate": 41.7, "avgScore": 78.1}, {"country": "Kuwait", "totalStores": 8, "audited": 8, "pending": 0, "rate": 100.0, "avgScore": 84.5}, {"country": "Qatar", "totalStores": 6, "audited": 6, "pending": 0, "rate": 100.0, "avgScore": 90.0}, {"country": "Oman", "totalStores": 2, "audited": 2, "pending": 0, "rate": 100.0, "avgScore": 87.0}, {"country": "Bahrain", "totalStores": 3, "audited": 0, "pending": 3, "rate": 0.0, "avgScore": null}], "stores": [{"Country": "UAE", "Area": "Dubai", "Store": "Dubai Mall", "Audited": true, "Percentage": 74.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit", "BM": "Robin", "SubmissionId": "OPS-20260827-123317-5495", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 4, "max": 8}, "customerExperience": {"score": 13, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Dubai", "Store": "Mall of the Emirates", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Dubai", "Store": "Mirdif City Centre", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": "Harshit belwal", "BM": "Menu", "SubmissionId": "OPS-20260829-121953-7249", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Dubai", "Store": "Marina Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Dubai", "Store": "Dubai Hills Mall", "Audited": true, "Percentage": 72.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit", "BM": "John Kennedy", "SubmissionId": "OPS-20260827-142201-7422", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 4, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Dubai", "Store": "Dubai Outlet Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Dubai", "Store": "Deira City Centre", "Audited": true, "Percentage": 79.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit belwal", "BM": "Pankaj", "SubmissionId": "OPS-20260830-201722-3744", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 13, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Dubai", "Store": "Dubai Festival City", "Audited": true, "Percentage": 77.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit", "BM": "Hamza", "SubmissionId": "OPS-20260830-150552-7662", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 4, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Dubai", "Store": "BurJuman Centre", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Dubai", "Store": "Arabian Center", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Dubai", "Store": "Palm Jumeirah", "Audited": true, "Percentage": 74.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit", "BM": "Abdul Hameed", "SubmissionId": "OPS-20260830-143130-5070", "categories": {"backend": {"score": 5, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 4, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Abu Dhabi Mall", "Audited": true, "Percentage": 74.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit", "BM": "Mohammed", "SubmissionId": "OPS-20260830-142537-6508", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 4, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Deerfields Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Bawabat Al Sharq Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Al Wahda Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Reem Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Mushrif Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Yas Mall", "Audited": true, "Percentage": 90.0, "Status": "EXCELLENT", "AIC": "Harshit", "BM": "Nader", "SubmissionId": "OPS-20260830-144051-3863", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 4, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Abu Dhabi", "Store": "Dalma Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Sharjah", "Store": "Sahara Centre", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Sharjah", "Store": "Al Zahia City Centre", "Audited": true, "Percentage": 77.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit belwal", "BM": "Magdey", "SubmissionId": "OPS-20260830-173740-7722", "categories": {"backend": {"score": 7, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 11, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Ajman", "Store": "Ajman City Centre", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "UAE", "Area": "Al Ain", "Store": "Bawadi Mall", "Audited": true, "Percentage": 79.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Harshit", "BM": "Reham", "SubmissionId": "OPS-20260829-170247-7815", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 5, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "UAE", "Area": "Fujairah", "Store": "Fujairah City Centre", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Oman", "Area": "Muscat", "Store": "Mall of Oman", "Audited": true, "Percentage": 87.0, "Status": "MEETS STANDARD", "AIC": "Amarpreet Singh Sanga", "BM": "Jon Jon Paragas", "SubmissionId": "OPS-20260826-205421-3837", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 11, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Oman", "Area": "Muscat", "Store": "Muscat City Centre", "Audited": true, "Percentage": 87.0, "Status": "MEETS STANDARD", "AIC": "Amarpreet Singh Sanga", "BM": "Pemba Tamang", "SubmissionId": "OPS-20260828-214823-1745", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 5, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Bahrain", "Area": "Manama", "Store": "Bahrain City Centre", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Bahrain", "Area": "Manama", "Store": "Marassi Galleria Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Bahrain", "Area": "Manama", "Store": "Avenues Mall", "Audited": false, "Percentage": null, "Status": null, "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Avenue Mall", "Audited": true, "Percentage": 90.0, "Status": "EXCELLENT", "AIC": "Nawas", "BM": "Nawas", "SubmissionId": "OPS-20260824-234908-2665", "categories": {"backend": {"score": 8, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 13, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Gate Mall", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "CK2 Avenue Mall", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": "Nawas", "BM": "SI/IFTEKHAR", "SubmissionId": "OPS-20260824-172311-4470", "categories": {"backend": {"score": 7, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 5, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Alkout Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "360 Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": null, "BM": null, "SubmissionId": null, "categories": {}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Assima Mall", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": "Nawas Deshmukh", "BM": "Aira", "SubmissionId": "OPS-20260822-173306-8182", "categories": {"backend": {"score": 6, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 5, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Al Khiran Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": "Nawas", "BM": "BIPIN KANDEL", "SubmissionId": "OPS-20260826-211825-3066", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Kuwait", "Area": "Kuwait City", "Store": "Marina Mall", "Audited": true, "Percentage": 85.0, "Status": "MEETS STANDARD", "AIC": "Nawas", "BM": "JOHN", "SubmissionId": "OPS-20260826-132848-2661", "categories": {"backend": {"score": 7, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 13, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Qatar", "Area": "Doha", "Store": "Doha City Centre", "Audited": true, "Percentage": 82.0, "Status": "MEETS STANDARD", "AIC": "Zeinab Zeilaa", "BM": "Mohammed Arshad", "SubmissionId": "OPS-20260829-175828-6047", "categories": {"backend": {"score": 8, "max": 9}, "business": {"score": 3, "max": 6}, "people": {"score": 7, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 0, "max": 2}}}, {"Country": "Qatar", "Area": "Doha", "Store": "Mall of Qatar", "Audited": true, "Percentage": 79.0, "Status": "DEVELOPMENT REQUIRED", "AIC": "Zeinab Zeilaa", "BM": "Kumar Tamang", "SubmissionId": "OPS-20260826-163436-4295", "categories": {"backend": {"score": 8, "max": 9}, "business": {"score": 4, "max": 6}, "people": {"score": 6, "max": 8}, "customerExperience": {"score": 12, "max": 14}, "retailPlanning": {"score": 1, "max": 2}}}, {"Country": "Qatar", "Area": "Doha", "Store": "Doha Festival City", "Audited": true, "Percentage": 97.0, "Status": "EXCELLENT", "AIC": "Zeinab Zeilaa", "BM": "Sujeet Sahu", "SubmissionId": "OPS-20260829-173103-2898", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 7, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Qatar", "Area": "Doha", "Store": "Villagio Mall", "Audited": true, "Percentage": 95.0, "Status": "EXCELLENT", "AIC": "Zeinab Zeilaa", "BM": "Noel Lubaton", "SubmissionId": "OPS-20260829-171843-2362", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 7, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 1, "max": 2}}}, {"Country": "Qatar", "Area": "Doha", "Store": "Landmark Mall", "Audited": true, "Percentage": 95.0, "Status": "EXCELLENT", "AIC": "Zeinab Zeilaa", "BM": "Khalil M'birki", "SubmissionId": "OPS-20260831-101213-7843", "categories": {"backend": {"score": 8, "max": 9}, "business": {"score": 6, "max": 6}, "people": {"score": 7, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 2, "max": 2}}}, {"Country": "Qatar", "Area": "Doha", "Store": "Vendome Mall", "Audited": true, "Percentage": 92.0, "Status": "EXCELLENT", "AIC": "Zeinab Zeilaa", "BM": "Oussama Zouaid", "SubmissionId": "OPS-20260829-174830-1577", "categories": {"backend": {"score": 9, "max": 9}, "business": {"score": 5, "max": 6}, "people": {"score": 7, "max": 8}, "customerExperience": {"score": 14, "max": 14}, "retailPlanning": {"score": 1, "max": 2}}}], "weakZones": [{"area": "People", "count": 57}, {"area": "Backend", "count": 38}, {"area": "Business", "count": 26}, {"area": "Retail \u2014 Customer's Experience", "count": 22}, {"area": "Retail \u2014 Planning", "count": 5}], "weakCategories": [{"area": "Learning & Development", "count": 57}, {"area": "Stockroom", "count": 37}, {"area": "Product Feedback", "count": 21}, {"area": "Guests", "count": 16}, {"area": "Business Performance & Analysis", "count": 5}, {"area": "Daily Huddle", "count": 5}, {"area": "Store's Atmosphere", "count": 4}, {"area": "Workplace Safety & Health", "count": 1}, {"area": "Windows", "count": 1}, {"area": "VM Standards", "count": 1}], "flagged": [{"id": "OPS-20260827-142201-7422", "country": "UAE", "area": "Dubai", "store": "Dubai Hills Mall", "score": 72.0, "aic": "Harshit", "bm": "John Kennedy", "notMetCount": 11, "totalCheckpoints": 39}, {"id": "OPS-20260827-123317-5495", "country": "UAE", "area": "Dubai", "store": "Dubai Mall", "score": 74.0, "aic": "Harshit", "bm": "Robin", "notMetCount": 10, "totalCheckpoints": 39}, {"id": "OPS-20260830-142537-6508", "country": "UAE", "area": "Abu Dhabi", "store": "Abu Dhabi Mall", "score": 74.0, "aic": "Harshit", "bm": "Mohammed", "notMetCount": 10, "totalCheckpoints": 39}, {"id": "OPS-20260830-143130-5070", "country": "UAE", "area": "Dubai", "store": "Palm Jumeirah", "score": 74.0, "aic": "Harshit", "bm": "Abdul Hameed", "notMetCount": 10, "totalCheckpoints": 39}, {"id": "OPS-20260830-173740-7722", "country": "UAE", "area": "Sharjah", "store": "Al Zahia City Centre", "score": 77.0, "aic": "Harshit belwal", "bm": "Magdey", "notMetCount": 9, "totalCheckpoints": 39}, {"id": "OPS-20260830-150552-7662", "country": "UAE", "area": "Dubai", "store": "Dubai Festival City", "score": 77.0, "aic": "Harshit", "bm": "Hamza", "notMetCount": 9, "totalCheckpoints": 39}, {"id": "OPS-20260830-201722-3744", "country": "UAE", "area": "Dubai", "store": "Deira City Centre", "score": 79.0, "aic": "Harshit belwal", "bm": "Pankaj", "notMetCount": 8, "totalCheckpoints": 39}, {"id": "OPS-20260829-170247-7815", "country": "UAE", "area": "Al Ain", "store": "Bawadi Mall", "score": 79.0, "aic": "Harshit", "bm": "Reham", "notMetCount": 8, "totalCheckpoints": 39}, {"id": "OPS-20260826-163436-4295", "country": "Qatar", "area": "Doha", "store": "Mall of Qatar", "score": 79.0, "aic": "Zeinab Zeilaa", "bm": "Kumar Tamang", "notMetCount": 8, "totalCheckpoints": 39}], "flaggedDetail": {"OPS-20260827-123317-5495": {"notMetCount": 10, "totalCheckpoints": 39, "checkpoints": [{"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to display sincere and effective technique while attempting to close the sale", "result": "NOT MET", "remark": "Add on selling was missing", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "Reservation tags were not maintained properly", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "Bags labels were missing", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "All personal belongings kept in the lockers", "result": "NOT MET", "remark": "Personal Bags was kept in racks", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "CDP was missing", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "NOT MET", "remark": "Mcc was not done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "NOT MET", "remark": "Mcc was not done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "No academic review was done", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "NOT MET", "remark": "Bestsellers were not updated", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "Slow movers were not updated", "action": ""}], "overallComments": "Store was neat and vm was arranged.\n\nCDP and mcc was missing\nBestsellers and worst sellers need to update"}, "OPS-20260827-142201-7422": {"notMetCount": 11, "totalCheckpoints": 39, "checkpoints": [{"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to engage customers to the conversation", "result": "NOT MET", "remark": "Team didn\u2019t engage with customer with open end questions", "action": ""}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to display sincere and effective technique while attempting to close the sale", "result": "NOT MET", "remark": "No add on selling", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Cleanliness & Tidiness", "result": "NOT MET", "remark": "Cans and food are kept next to merchandise", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "Reservation tags are not properly done", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "All personal belongings kept in the lockers", "result": "NOT MET", "remark": "Bags are outside the lockers", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "Not maintained in store", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "NOT MET", "remark": "Not yet done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "NOT MET", "remark": "Not yet done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "Academic review is missing", "action": ""}, {"zone": "Business", "category": "Business Performance & Analysis", "checkpoint": "Target Clarity & Action Plan", "result": "NOT MET", "remark": "Team not aware about daily target. However they are aware about daily requirement of the store.", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "Slow movers are not maintained", "action": ""}], "overallComments": "Store looks good.\n\nNeed to update CDP and mcc for team \n\nSlow movers need to be updated"}, "OPS-20260830-201722-3744": {"notMetCount": 8, "totalCheckpoints": 39, "checkpoints": [{"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to engage customers to the conversation", "result": "NOT MET", "remark": "there was not much of Open end question", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "proper reservation tags are missing", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "back store is not fixed", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "All personal belongings kept in the lockers", "result": "NOT MET", "remark": "personal belongings are kept outside", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "cdp is missing for everyone", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "academic review not done", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "NOT MET", "remark": "not prepared for week 34", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "not prepared for week 34", "action": ""}], "overallComments": "bestseller and slow movers are missing\n\nreservation area need to be kept properly"}, "OPS-20260830-150552-7662": {"notMetCount": 9, "totalCheckpoints": 39, "checkpoints": [{"zone": "Backend", "category": "Stockroom", "checkpoint": "Boards are updated", "result": "NOT MET", "remark": "sales board not updated", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "labels are not properly updated", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "labels are missing", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "cdp not yet done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "NOT MET", "remark": "mcc not yet done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "NOT MET", "remark": "mcc not yet done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "academic review is not done", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "NOT MET", "remark": "bestsellers is not updated", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "slow movers in not updated", "action": ""}], "overallComments": "bestsellers and slow movers need to be updated\nmcc is missing\nlabels are missing in bags"}, "OPS-20260830-143130-5070": {"notMetCount": 10, "totalCheckpoints": 39, "checkpoints": [{"zone": "Backend", "category": "Stockroom", "checkpoint": "Boards are updated", "result": "NOT MET", "remark": "boards are not updated", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "reservation tags are not updated properly", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "bags labels are missing", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "All personal belongings kept in the lockers", "result": "NOT MET", "remark": "bags are kept outside the lockers", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "cdp assesment was not there", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "NOT MET", "remark": "mcc is not maintained", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "NOT MET", "remark": "mcc is not maintained", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "academic review is not done", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "NOT MET", "remark": "bestsellers were not maintained", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "slow movers are not maintained", "action": ""}], "overallComments": "store need to update the best seller and slow movers\ncdp need to be done\nmaintain the backstore"}, "OPS-20260830-142537-6508": {"notMetCount": 10, "totalCheckpoints": 39, "checkpoints": [{"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to engage customers to the conversation", "result": "NOT MET", "remark": "need to ask more open end question", "action": ""}, {"zone": "Retail \u2014 Customer's Experience", "category": "Store's Atmosphere", "checkpoint": "Lighting", "result": "NOT MET", "remark": "busted light in floor and backstore", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Boards are updated", "result": "NOT MET", "remark": "boards were not updated", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "reservation don't have proper tags", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "missing labels in many bags", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "cdp is not maintained", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "NOT MET", "remark": "mcc is not done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "NOT MET", "remark": "mcc is not done", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "academic review not done", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "slow movers are not maintained", "action": ""}], "overallComments": "store need more improvement on back store\n\nneed to update  the wost sellers"}, "OPS-20260830-173740-7722": {"notMetCount": 9, "totalCheckpoints": 39, "checkpoints": [{"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to engage customers to the conversation", "result": "NOT MET", "remark": "No open end question", "action": ""}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to increase customers' interest for the product they presented", "result": "NOT MET", "remark": "The interaction was very minimal", "action": ""}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff proactively kept customers' needs in mind", "result": "NOT MET", "remark": "Not implemented much", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "Reservation are not kept with proper tag", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "CDP not done", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "Labels are missing", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "No academic review", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "NOT MET", "remark": "Not updated", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "Not updated", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "MET", "remark": "Done", "action": ""}], "overallComments": "CDP need to be updated\nBOH need to be fixed"}, "OPS-20260829-170247-7815": {"notMetCount": 8, "totalCheckpoints": 39, "checkpoints": [{"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "Reservation are not updated", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "NOT MET", "remark": "Bag labels are missing", "action": ""}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "All personal belongings kept in the lockers", "result": "NOT MET", "remark": "Personal belongings are kept outside", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "NOT MET", "remark": "CDP are pending for the team", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "Academic review yet to be done by trainer", "action": ""}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "NOT MET", "remark": "Not yet done for Mariem", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "NOT MET", "remark": "Bestsellers is not updated", "action": ""}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "Slow movers are not updated", "action": ""}, {"zone": "Retail \u2014 Customer's Experience", "category": "Store's Atmosphere", "checkpoint": "Lighting", "result": "MET", "remark": "Busted lights in floor, but follow up is done", "action": ""}], "overallComments": "CDP is pending\nMcc is pending \nLabels and backstore need to fix\nBestsellers and slow movers need to be updated"}, "OPS-20260826-163436-4295": {"notMetCount": 8, "totalCheckpoints": 39, "checkpoints": [{"zone": "Retail \u2014 Customer's Experience", "category": "Store's Atmosphere", "checkpoint": "Music playing, correct playlist, proper volume", "result": "NOT MET", "remark": "No music was played in my visit", "action": "Music should be on"}, {"zone": "Retail \u2014 Customer's Experience", "category": "VM Standards", "checkpoint": "Compliance on display capacity", "result": "NOT MET", "remark": "Over displayed", "action": "Broken ftw lines should be removed"}, {"zone": "Retail \u2014 Planning", "category": "Daily Huddle", "checkpoint": "Daily Topic", "result": "NOT MET", "remark": "Kumar has not been consistent", "action": "Daily topic to be followed regularly"}, {"zone": "Business", "category": "Business Performance & Analysis", "checkpoint": "Execution Ownership & KPI Accountability", "result": "NOT MET", "remark": "Not visible", "action": "More focus targeted areas and techniques to improve the kpis"}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Logistic management", "result": "NOT MET", "remark": "Delivery status not updated", "action": "Delivery status"}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Slow mover + Action", "result": "NOT MET", "remark": "Identified", "action": "I believe slow movers should be set as a target to team as we cannot keep pulling them our from store and this has to be the focus"}, {"zone": "People", "category": "Learning & Development", "checkpoint": "Academy Review (minimum 80% scoring)", "result": "NOT MET", "remark": "Not available", "action": "It has to be completed by training dept"}, {"zone": "People", "category": "Learning & Development", "checkpoint": "LMS courses completion", "result": "NOT MET", "remark": "Not available", "action": "Not available"}, {"zone": "People", "category": "Manpower", "checkpoint": "Weekly roster plan accordingly", "result": "MET", "remark": "Yes and shared on time", "action": "Morning shifts to be balanced"}, {"zone": "Retail \u2014 Planning", "category": "Daily Huddle", "checkpoint": "Good news / Priorities", "result": "MET", "remark": "Communicated- team are briefed on daily basis", "action": "Retails analysis training"}, {"zone": "Business", "category": "Business Performance & Analysis", "checkpoint": "Target Clarity & Action Plan", "result": "MET", "remark": "Yes", "action": "More strategic plans to achieve the targets"}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Best sellers + Action", "result": "MET", "remark": "Replenished and requested", "action": "Na"}, {"zone": "People", "category": "Managers", "checkpoint": "Floor control & Presence", "result": "MET", "remark": "Manager is available on the floor", "action": "Interaction is required with the team"}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC completion (100%)", "result": "MET", "remark": "Completed", "action": "Completed"}, {"zone": "People", "category": "Learning & Development", "checkpoint": "MCC (minimum 80% scoring)", "result": "MET", "remark": 0.8, "action": "Score has to improve by training the team and coaching them"}, {"zone": "Business", "category": "Business Performance & Analysis", "checkpoint": "KPI Performance Summary", "result": "MET", "remark": "Yes", "action": "Upt focus"}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Boards are updated", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom management", "result": "MET", "remark": "Arranged properly", "action": "Re-arrangement for some areas"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Customers felt welcomed by staff's greeting & approach", "result": "MET", "remark": "Team members are actively welcoming and greeting the customers", "action": ""}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff left a good last impression with the customer", "result": "MET", "remark": "Yes", "action": "Clientelling"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to increase customers' interest for the product they presented", "result": "MET", "remark": "Yes they explained the features", "action": "Alternative when sizes are sold out"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff proactively kept customers' needs in mind", "result": "MET", "remark": "They understood the customers needs and offers styles accordingly", "action": "Na"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to display sincere and effective technique while attempting to close the sale", "result": "MET", "remark": "Staff are suggesting alternatives and were able to handle objections however cross selling requires more attention", "action": "Cross selling techniques and upt focus"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Guests", "checkpoint": "Staff were able to engage customers to the conversation", "result": "MET", "remark": "Team are well engaged", "action": "Na"}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Cleanliness & Tidiness", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "People", "category": "Grooming", "checkpoint": "Managers & Staff \u2014 Uniform & Image", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Backend", "category": "Workplace Safety & Health", "checkpoint": "Fire exits & fire extinguisher", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Backend", "category": "Workplace Safety & Health", "checkpoint": "Lighting & ventilation", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Backend", "category": "Workplace Safety & Health", "checkpoint": "Use of ladders", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "All personal belongings kept in the lockers", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Backend", "category": "Stockroom", "checkpoint": "Stockroom capacity is maintained based on storage requirements", "result": "MET", "remark": "Maintained", "action": "Na"}, {"zone": "People", "category": "Learning & Development", "checkpoint": "CDP_OJT LOG / CDP_Assessment", "result": "MET", "remark": "Yes", "action": "Ojt has been completed\nCdp is pending just for staff before less"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Store's Atmosphere", "checkpoint": "Lighting", "result": "MET", "remark": "Yes", "action": "Lights bulb color should be aligned it s mixed between yellow/white"}, {"zone": "Retail \u2014 Customer's Experience", "category": "VM Standards", "checkpoint": "Proper storage of VM props", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Retail \u2014 Customer's Experience", "category": "VM Standards", "checkpoint": "VM Guidelines in color scheme & Presentation, new arrival", "result": "MET", "remark": "Guidelines are followed", "action": "Display was cluttered, broken lines can be removed"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Windows", "checkpoint": "Up to date articles displayed & stocks availability", "result": "MET", "remark": "Yes", "action": "Na"}, {"zone": "Business", "category": "Product Feedback", "checkpoint": "Collection / Seasonal Product feedback", "result": "MET", "remark": "Provided", "action": "Na"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Store's Atmosphere", "checkpoint": "Fixtures are in good condition and well maintained", "result": "MET", "remark": "Maintained", "action": "Na"}, {"zone": "Retail \u2014 Customer's Experience", "category": "Store's Atmosphere", "checkpoint": "Housekeeping", "result": "MET", "remark": "Yes", "action": "Na"}], "overallComments": "More engagement and involvement is required from the store manager for coaching and training the team"}}, "categoryMax": {"retailPlanning": 2, "customerExperience": 14, "backend": 9, "people": 8, "business": 6}};
+
+function scoreClass(pct){ if(pct>=85) return 'score-good'; if(pct>=70) return 'score-mid'; return 'score-bad'; }
+function statusClass(status){
+  if(!status) return {bg:'var(--parchment-2)',c:'var(--muted)'};
+  const s = status.toUpperCase();
+  if(s==='EXCELLENT') return {bg:'var(--green-bg)',c:'var(--green)'};
+  if(s==='MEETS STANDARD') return {bg:'var(--amber-bg)',c:'var(--amber)'};
+  return {bg:'var(--red-bg)',c:'var(--red)'};
+}
+
+/* ---- NAVIGATION ---- */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelector(`.nav-btn[data-page="${name}"]`).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.getElementById('navBar').addEventListener('click', e=>{
+  if(e.target.classList.contains('nav-btn')) showPage(e.target.dataset.page);
+});
+document.getElementById('navFlagCount').textContent = DATA.totals.flaggedCount;
+
+/* ---- KPI STRIP ---- */
+const t = DATA.totals;
+const kpis = [
+  {label:'Total Stores', num:t.totalStores, sub:'Across 5 countries'},
+  {label:'Audited', num:t.audited, sub:t.rate+'% of stores', accent:true},
+  {label:'Pending', num:t.pending, sub:'Not yet audited'},
+  {label:'Avg Score', num:t.avgScore+'%', sub:t.excellent+' excellent · '+t.meetsStandard+' meets standard'},
+  {label:'Development Required', num:t.developmentRequired, sub:'Stores flagged', alert:true},
+  {label:'Countries at 0%', num:t.zeroCountries, sub:'no store audited yet'},
+];
+document.getElementById('kpiRow').innerHTML = kpis.map(k=>`
+  <div class="kpi ${k.accent?'accent':''} ${k.alert?'alert':''}">
+    <div class="label">${k.label}</div><div class="num">${k.num}</div><div class="sub">${k.sub}</div>
+  </div>`).join('');
+
+/* ---- OVERVIEW: COUNTRY GRID ---- */
+document.getElementById('countryGrid').innerHTML = DATA.countries.map(c=>{
+  const done = c.rate===100;
+  const zero = c.rate===0;
+  return `<div class="country-card ${zero?'zero':''} ${done?'done':''}" data-goto-country="${c.country}">
+    <div class="c-name">${c.country}</div>
+    <div class="c-rate ${zero?'zero':''} ${done?'done':''}">${c.rate}%</div>
+    <div class="c-rate-label">audited</div>
+    <div class="bar-track"><div class="bar-fill ${zero?'zero':''} ${done?'done':''}" style="width:${Math.max(c.rate,zero?0:2)}%"></div></div>
+    <div class="c-stats">
+      <span>Total <b>${c.totalStores}</b></span><span>Done <b>${c.audited}</b></span><span>Avg <b>${c.avgScore!=null?c.avgScore+'%':'—'}</b></span>
+    </div>
+    <div class="c-hint">View detail →</div>
+  </div>`;
+}).join('');
+document.getElementById('countryGrid').addEventListener('click', e=>{
+  const card = e.target.closest('[data-goto-country]');
+  if(!card) return;
+  showPage('country');
+  selectCountry(card.dataset.gotoCountry);
+});
+
+/* ---- OVERVIEW: STORE TABLE ---- */
+document.getElementById('storeNote').textContent = DATA.stores.length+' stores total · '+t.audited+' audited so far';
+const countries = ['All', ...DATA.countries.map(c=>c.country)];
+document.getElementById('storeFilters').innerHTML =
+  countries.map((c,i)=>`<button class="chip ${i===0?'active':''}" data-country="${c}">${c}</button>`).join('')
+  + `<input class="search-box" id="storeSearch" placeholder="Search store or area…">`;
+
+function storeRowHtml(s, showCountry){
+  const sc = statusClass(s.Status);
+  const scoreCell = s.Audited ? `<span class="score-pill ${scoreClass(s.Percentage)}">${s.Percentage}%</span>` : `<span style="color:var(--muted);font-size:12px">—</span>`;
+  const statusCell = s.Audited ? `<span class="status-pill" style="background:${sc.bg};color:${sc.c}">${s.Status}</span>` : `<span style="color:var(--muted);font-size:12px">Pending</span>`;
+  return `<tr>
+    ${showCountry? `<td>${s.Country}</td>`:''}
+    <td>${s.Area}</td>
+    <td><b>${s.Store}</b></td>
+    <td>${s.AIC||'—'}</td>
+    <td>${s.BM||'—'}</td>
+    <td style="text-align:right">${scoreCell}</td>
+    <td>${statusCell}</td>
+  </tr>`;
+}
+function renderStores(filterCountry, query){
+  let rows = DATA.stores.filter(s=>{
+    const matchCountry = filterCountry==='All' || s.Country===filterCountry;
+    const matchQuery = !query || (s.Store+' '+s.Area).toLowerCase().includes(query.toLowerCase());
+    return matchCountry && matchQuery;
+  });
+  document.getElementById('storeBody').innerHTML = rows.map(s=>storeRowHtml(s,true)).join('')
+    || `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">No stores match this filter.</td></tr>`;
+}
+renderStores('All','');
+document.getElementById('storeFilters').addEventListener('click', e=>{
+  if(!e.target.classList.contains('chip')) return;
+  document.querySelectorAll('#storeFilters .chip').forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  renderStores(e.target.dataset.country, document.getElementById('storeSearch').value);
+});
+document.getElementById('storeFilters').addEventListener('input', e=>{
+  if(e.target.id!=='storeSearch') return;
+  const active = document.querySelector('#storeFilters .chip.active').dataset.country;
+  renderStores(active, e.target.value);
+});
+
+/* ---- PAGE 2: COUNTRY DETAIL ---- */
+document.getElementById('countryTabs').innerHTML = DATA.countries.map((c,i)=>
+  `<button class="chip ${i===0?'active':''}" data-country="${c.country}">${c.country}</button>`).join('');
+
+function selectCountry(name){
+  document.querySelectorAll('#countryTabs .chip').forEach(b=>b.classList.toggle('active', b.dataset.country===name));
+  const c = DATA.countries.find(x=>x.country===name);
+  document.getElementById('countryDetailKpis').innerHTML = `
+    <div class="country-card ${c.rate===0?'zero':''} ${c.rate===100?'done':''}" style="cursor:default;">
+      <div class="c-name">Total Stores</div><div class="c-rate">${c.totalStores}</div><div class="c-rate-label">in ${c.country}</div>
+    </div>
+    <div class="country-card ${c.rate===0?'zero':''} ${c.rate===100?'done':''}" style="cursor:default;">
+      <div class="c-name">Audited</div><div class="c-rate ${c.rate===100?'done':''}">${c.audited}</div><div class="c-rate-label">completed</div>
+    </div>
+    <div class="country-card ${c.rate===0?'zero':''} ${c.rate===100?'done':''}" style="cursor:default;">
+      <div class="c-name">Pending</div><div class="c-rate ${c.pending>0?'zero':''}">${c.pending}</div><div class="c-rate-label">remaining</div>
+    </div>
+    <div class="country-card ${c.rate===0?'zero':''} ${c.rate===100?'done':''}" style="cursor:default;">
+      <div class="c-name">Avg Score</div><div class="c-rate">${c.avgScore!=null?c.avgScore+'%':'—'}</div>
+      <div class="bar-track"><div class="bar-fill ${c.rate===0?'zero':''} ${c.rate===100?'done':''}" style="width:${Math.max(c.rate,c.rate===0?0:2)}%"></div></div>
+    </div>`;
+  const rows = DATA.stores.filter(s=>s.Country===name);
+  document.getElementById('countryDetailBody').innerHTML = rows.map(s=>storeRowHtml(s,false)).join('')
+    || `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No store data for this country.</td></tr>`;
+}
+document.getElementById('countryTabs').addEventListener('click', e=>{
+  if(e.target.classList.contains('chip')) selectCountry(e.target.dataset.country);
+});
+selectCountry(DATA.countries[0].country);
+
+/* ---- PAGE 3: FLAGGED STORES ---- */
+document.getElementById('flaggedNote').textContent = t.developmentRequired+' stores flagged · sorted lowest score first.';
+const flagCountries = ['All', ...new Set(DATA.flagged.map(f=>f.country))];
+document.getElementById('flaggedFilters').innerHTML = flagCountries.map((c,i)=>
+  `<button class="chip ${i===0?'active':''}" data-country="${c}">${c}</button>`).join('');
+
+function renderFlagged(filterCountry){
+  const rows = DATA.flagged.filter(f=> filterCountry==='All' || f.country===filterCountry);
+  document.getElementById('flaggedGrid').innerHTML = rows.map(f=>{
+    return `<div class="f-card" data-id="${f.id}">
+      <div class="f-top">
+        <div><div class="f-name">${f.store}</div><div class="f-role">${f.area}, ${f.country}</div></div>
+        <div class="f-score">${f.score}%</div>
+      </div>
+      <div class="f-loc"><b>AIC:</b> ${f.aic||'—'} &nbsp; <b>BM:</b> ${f.bm||'—'}</div>
+      <div class="f-foot">
+        <span class="status-pill" style="background:var(--red-bg);color:var(--red);">Development Required</span>
+        <span>${f.notMetCount} of ${f.totalCheckpoints} not met</span>
+      </div>
+      <div class="f-hint">View all comments & actions →</div>
+    </div>`;
+  }).join('') || `<div style="color:var(--muted);padding:24px;">No flagged stores for this country.</div>`;
+}
+renderFlagged('All');
+document.getElementById('flaggedFilters').addEventListener('click', e=>{
+  if(!e.target.classList.contains('chip')) return;
+  document.querySelectorAll('#flaggedFilters .chip').forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  renderFlagged(e.target.dataset.country);
+});
+
+/* ---- MODAL ---- */
+const overlay = document.getElementById('modalOverlay');
+function openModal(id){
+  const f = DATA.flagged.find(x=>x.id===id);
+  const d = DATA.flaggedDetail[id];
+  if(!f) return;
+  document.getElementById('modalName').textContent = f.store;
+  document.getElementById('modalSub').textContent = `${f.area}, ${f.country} · AIC: ${f.aic||'—'} · BM: ${f.bm||'—'}`;
+  document.getElementById('modalScore').textContent = f.score+'%';
+  document.getElementById('modalScore').style.color = '#F0C5C5';
+  document.getElementById('modalStatus').textContent = 'DEVELOPMENT REQUIRED';
+  document.getElementById('modalStatus').style.background = 'var(--red-bg)';
+  document.getElementById('modalStatus').style.color = 'var(--red)';
+
+  document.getElementById('modalOverallComments').innerHTML = d.overallComments
+    ? `<div class="overall-comments"><div class="oc-label">Auditor's Overall Comments</div>${d.overallComments}</div>`
+    : '';
+  document.getElementById('modalChkTitle').textContent = `All Checkpoint Comments (${d.checkpoints.length} of ${d.totalCheckpoints}, ${d.notMetCount} not met)`;
+
+  document.getElementById('modalChecklist').innerHTML = d.checkpoints.map(c=>{
+    const isMet = c.result==='MET';
+    return `
+    <div class="chk-item ${isMet?'met':''}">
+      <div class="chk-zone"><span>${c.zone} · ${c.category}</span><span class="chk-result-tag ${isMet?'met':'not-met'}">${c.result}</span></div>
+      <div class="chk-title">${c.checkpoint}</div>
+      <div class="chk-detail">
+        <div><div class="lbl">Remark</div><div class="txt ${!c.remark?'empty':''}">${c.remark || 'No remark recorded.'}</div></div>
+        <div><div class="lbl">Action</div><div class="txt ${!c.action?'empty':''}">${c.action || 'No action recorded.'}</div></div>
+      </div>
+    </div>`;
+  }).join('') || '<div style="color:var(--muted);">No checkpoint-level detail available.</div>';
+  overlay.classList.add('open');
+}
+document.getElementById('flaggedGrid').addEventListener('click', e=>{
+  const card = e.target.closest('.f-card');
+  if(card) openModal(card.dataset.id);
+});
+document.getElementById('modalClose').addEventListener('click', ()=> overlay.classList.remove('open'));
+overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.classList.remove('open'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') overlay.classList.remove('open'); });
+
+/* ---- PAGE 4: WEAK AREAS ---- */
+document.getElementById('weakSummary').innerHTML = `
+  <div class="weak-summary-card"><div class="n">${DATA.weakZones[0].area}</div><div class="l">Top gap zone (${DATA.weakZones[0].count} not-met)</div></div>
+  <div class="weak-summary-card"><div class="n">${DATA.weakCategories[0].area}</div><div class="l">Top gap category (${DATA.weakCategories[0].count} not-met)</div></div>
+  <div class="weak-summary-card"><div class="n">${DATA.weakZones.reduce((a,b)=>a+b.count,0)}</div><div class="l">Total not-met checkpoints</div></div>
+`;
+function renderWeakList(containerId, rows, title){
+  const maxW = Math.max(...rows.map(w=>w.count));
+  const brassGradient = ['#A78BBF','#B79BC9','#C7ABD3','#D3B9DC','#DFC7E4','#E9D6EC','#F0E2F1','#F5EBF5','#FAF3FA'];
+  document.getElementById(containerId).innerHTML =
+    `<div style="font-family:'Oswald',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:14px;">${title}</div>` +
+    rows.map((w,i)=>`
+    <div class="weak-row">
+      <div class="weak-label">${w.area}</div>
+      <div class="weak-track"><div class="weak-fill" style="width:${w.count/maxW*100}%; background:${brassGradient[i]||'#B8874F'}"></div></div>
+      <div class="weak-count">${w.count}</div>
+    </div>`).join('');
+}
+renderWeakList('weakZoneWrap', DATA.weakZones, 'By Zone');
+renderWeakList('weakCategoryWrap', DATA.weakCategories.slice(0,10), 'By Category (top 10)');
+
+/* ---- FOOTER ---- */
+document.getElementById('footerNote').innerHTML =
+  `<b>Data notes:</b> Store list matches the confirmed 43-store MCC master list across 5 countries. Scores reflect
+  the most recent audit per store — Dubai Mall was audited twice (87% then 74% six days later); the later result is
+  shown. Two accidental duplicate submissions (Assima Mall, Muscat City Centre) were deduplicated. Category maximums:
+  Retail Planning /2, Customer Experience /14, Backend /9, People /8, Business /6 (total /39). "NOT MET" checkpoint
+  counts exclude duplicate submissions to avoid double-counting.`;
+</script>
+</body>
+</html>
