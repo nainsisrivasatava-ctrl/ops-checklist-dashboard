@@ -1,3 +1,1 @@
-// Paste your Operations Checklist web app URL (ends in /exec) and keep ?action=dashboard on the end.
-// All 6 Ops dashboards read from this one line.
-window.OPS_DATA_URL = "";
+   window.OPS_DATA_URL = "https://script.google.com/macros/s/AKfycbzVn38FRpcL4MA4HMlyegRq3bRs9dwDumHvx8wAglCNyA-stGj_H7z346qWgMI8ODQX/exec?action=dashboard";
